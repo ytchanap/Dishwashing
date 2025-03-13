@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>洗碗碟机测算工具</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 20px;
+      background-color: #f5f5f5;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 25px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 30px;
+    }
+    .input-group {
+      margin-bottom: 20px;
+    }
+    .input-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #34495e;
+      font-weight: 600;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    .input-group input:focus {
+      border-color: #3498db;
+      outline: none;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #2980b9;
+    }
+    .result {
+      margin-top: 25px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 5px;
+    }
+    .result-item {
+      margin: 15px 0;
+      font-size: 16px;
+      color: #2c3e50;
+    }
+    .result-item span {
+      font-weight: bold;
+      color: #e74c3c;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>洗碗碟机测算工具</h1>
+    <form id="calculator">
+      <!-- 燃气相关参数 -->
+      <div class="input-group">
+        <label>燃气收费（元/m³）</label>
+        <input type="number" id="B7" value="4" required>
+      </div>
+      <div class="input-group">
+        <label>燃气成本（元/m³）</label>
+        <input type="number" id="B8" value="3" required>
+      </div>
+
+      <!-- 设备参数 -->
+      <div class="input-group">
+        <label>热水炉功率（kW）</label>
+        <input type="number" id="B14" value="30" required>
+      </div>
+      <div class="input-group">
+        <label>每天运行时间（小时）</label>
+        <input type="number" id="B15" value="5" required>
+      </div>
+      <div class="input-group">
+        <label>每年运行天数（天）</label>
+        <input type="number" id="B16" value="330" required>
+      </div>
+
+      <!-- 能源价格 -->
+      <div class="input-group">
+        <label>电费（元/kWh）</label>
+        <input type="number" id="B9" value="0.8" step="0.1" required>
+      </div>
+
+      <button type="button" onclick="calculate()">立即计算</button>
+    </form>
+
+    <div class="result">
+      <div class="result-item">
+        燃气洗碗碟机年能源成本: <span id="gas-cost"></span> 元
+      </div>
+      <div class="result-item">
+        电洗碗碟机年能源成本: <span id="electric-cost"></span> 元
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function calculate() {
+      // 获取输入值
+      const B7 = parseFloat(document.getElementById("B7").value);
+      const B8 = parseFloat(document.getElementById("B8").value);
+      const B9 = parseFloat(document.getElementById("B9").value);
+      const B14 = parseFloat(document.getElementById("B14").value);
+      const B15 = parseFloat(document.getElementById("B15").value);
+      const B16 = parseFloat(document.getElementById("B16").value);
+
+      // 计算燃气售价和成本（元/kWh）
+      const 燃气售价 = (B7 / 35) * 3.6;
+      const 燃气成本 = (B8 / 35) * 3.6;
+
+      // 计算能源成本
+      const 燃气能源成本 = (B14 * B15 * B16 / 0.85) * 燃气售价;
+      const 电能源成本 = (B14 * B15 * B16 / 0.95) * B9;
+
+      // 显示结果
+      document.getElementById("gas-cost").textContent = 燃气能源成本.toFixed(2);
+      document.getElementById("electric-cost").textContent = 电能源成本.toFixed(2);
+    }
+  </script>
+</body>
+</html>
